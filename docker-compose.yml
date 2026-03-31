@@ -1,0 +1,51 @@
+name: memora
+
+services:
+  postgres:
+    image: pgvector/pgvector:pg16
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-ragdocs}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-ragdocs_pass}
+      POSTGRES_DB: ${POSTGRES_DB:-ragdocs_db}
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./scripts/init_pgvector.sql:/docker-entrypoint-initdb.d/init.sql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-ragdocs} -d ${POSTGRES_DB:-ragdocs_db}"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  backend:
+    build: ./backend
+    ports:
+      - "8000:8000"
+    environment:
+      - DATABASE_URL=postgresql+asyncpg://${POSTGRES_USER:-ragdocs}:${POSTGRES_PASSWORD:-ragdocs_pass}@postgres:5432/${POSTGRES_DB:-ragdocs_db}
+      - CEREBRAS_API_KEY=${CEREBRAS_API_KEY}
+      - JINA_API_KEY=${JINA_API_KEY}
+      - JWT_SECRET=${JWT_SECRET}
+      - JWT_EXPIRATION_HOURS=${JWT_EXPIRATION_HOURS:-24}
+      - CEREBRAS_MODEL=${CEREBRAS_MODEL:-llama3.1-8b}
+    volumes:
+      - backend_uploads:/app/uploads
+      - models_cache:/app/models_cache
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  frontend:
+    build: ./frontend
+    ports:
+      - "5173:5173"
+    volumes:
+      - ./frontend/src:/app/src
+    depends_on:
+      - backend
+
+volumes:
+  postgres_data:
+  backend_uploads:
+  models_cache:
