@@ -1,0 +1,25 @@
+import asyncio
+from sentence_transformers import SentenceTransformer
+
+from app.config import settings
+
+_model: SentenceTransformer | None = None
+
+
+def _get_model() -> SentenceTransformer:
+    global _model
+    if _model is None:
+        _model = SentenceTransformer(settings.EMBEDDING_MODEL, cache_folder=settings.MODELS_CACHE_DIR)
+    return _model
+
+
+async def get_embedding(text: str) -> list[float]:
+    model = _get_model()
+    embedding = await asyncio.to_thread(model.encode, text)
+    return embedding.tolist()
+
+
+async def get_embeddings_batch(texts: list[str]) -> list[list[float]]:
+    model = _get_model()
+    embeddings = await asyncio.to_thread(model.encode, texts)
+    return [e.tolist() for e in embeddings]
