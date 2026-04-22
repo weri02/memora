@@ -1,0 +1,214 @@
+import { useState, type FormEvent } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { UserPlus, Eye, EyeOff } from "lucide-react";
+import { useAuthStore } from "@/stores/authStore";
+
+export default function RegisterPage() {
+  const navigate = useNavigate();
+  const { register, isLoading, error, clearError } = useAuthStore();
+
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+  const [localError, setLocalError] = useState("");
+
+  const handleSubmit = async (e: FormEvent) => {
+    e.preventDefault();
+    setLocalError("");
+
+    // Validacion: passwords coinciden
+    if (password !== confirmPassword) {
+      setLocalError("Las passwords no coinciden");
+      return;
+    }
+
+    // Validacion: longitud minima
+    if (password.length < 6) {
+      setLocalError("La password debe tener al menos 6 caracteres");
+      return;
+    }
+
+    try {
+      await register(email, password, name);
+      navigate("/documents");
+    } catch {
+      // Error via store
+    }
+  };
+
+  const displayError = localError || error;
+
+  return (
+    <div className="min-h-screen flex items-center justify-center px-4">
+      <div
+        className="w-full max-w-md bg-white border-[3px] border-pencil shadow-hand-lg p-8"
+        style={{
+          borderRadius: "255px 15px 225px 15px / 15px 225px 15px 255px",
+        }}
+      >
+        {/* Titulo */}
+        <div className="text-center mb-8">
+          <h1 className="font-heading text-4xl font-bold text-pencil mb-2">
+            Memora
+          </h1>
+          <p className="font-body text-xl text-pencil/60">
+            Crea tu cuenta
+          </p>
+        </div>
+
+        {/* Error */}
+        {displayError && (
+          <div
+            className="mb-4 p-3 bg-accent/10 border-2 border-accent text-accent font-body text-center"
+            style={{
+              borderRadius: "255px 15px 225px 15px / 15px 225px 15px 255px",
+            }}
+          >
+            {displayError}
+            <button
+              onClick={() => {
+                setLocalError("");
+                clearError();
+              }}
+              className="ml-2 underline hover:no-underline"
+            >
+              x
+            </button>
+          </div>
+        )}
+
+        {/* Formulario */}
+        <form onSubmit={handleSubmit} className="space-y-4">
+          {/* Nombre */}
+          <div>
+            <label className="font-heading text-lg text-pencil block mb-1">
+              Nombre
+            </label>
+            <input
+              type="text"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              required
+              placeholder="Tu nombre"
+              className="w-full px-4 py-3 font-body text-lg bg-white border-2 border-pencil
+                placeholder:text-pencil/40
+                focus:border-accent-blue focus:ring-2 focus:ring-accent-blue/20 focus:outline-none
+                transition-colors"
+              style={{
+                borderRadius: "255px 15px 225px 15px / 15px 225px 15px 255px",
+              }}
+            />
+          </div>
+
+          {/* Email */}
+          <div>
+            <label className="font-heading text-lg text-pencil block mb-1">
+              Email
+            </label>
+            <input
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+              placeholder="tu@email.com"
+              className="w-full px-4 py-3 font-body text-lg bg-white border-2 border-pencil
+                placeholder:text-pencil/40
+                focus:border-accent-blue focus:ring-2 focus:ring-accent-blue/20 focus:outline-none
+                transition-colors"
+              style={{
+                borderRadius: "15px 255px 15px 225px / 225px 15px 255px 15px",
+              }}
+            />
+          </div>
+
+          {/* Password */}
+          <div>
+            <label className="font-heading text-lg text-pencil block mb-1">
+              Password
+            </label>
+            <div className="relative">
+              <input
+                type={showPassword ? "text" : "password"}
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+                placeholder="Minimo 6 caracteres"
+                className="w-full px-4 py-3 pr-12 font-body text-lg bg-white border-2 border-pencil
+                  placeholder:text-pencil/40
+                  focus:border-accent-blue focus:ring-2 focus:ring-accent-blue/20 focus:outline-none
+                  transition-colors"
+                style={{
+                  borderRadius:
+                    "255px 15px 225px 15px / 15px 225px 15px 255px",
+                }}
+              />
+              <button
+                type="button"
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-pencil/50 hover:text-pencil"
+              >
+                {showPassword ? (
+                  <EyeOff size={20} strokeWidth={2.5} />
+                ) : (
+                  <Eye size={20} strokeWidth={2.5} />
+                )}
+              </button>
+            </div>
+          </div>
+
+          {/* Confirmar password */}
+          <div>
+            <label className="font-heading text-lg text-pencil block mb-1">
+              Confirmar password
+            </label>
+            <input
+              type={showPassword ? "text" : "password"}
+              value={confirmPassword}
+              onChange={(e) => setConfirmPassword(e.target.value)}
+              required
+              placeholder="Repite tu password"
+              className="w-full px-4 py-3 font-body text-lg bg-white border-2 border-pencil
+                placeholder:text-pencil/40
+                focus:border-accent-blue focus:ring-2 focus:ring-accent-blue/20 focus:outline-none
+                transition-colors"
+              style={{
+                borderRadius: "15px 255px 15px 225px / 225px 15px 255px 15px",
+              }}
+            />
+          </div>
+
+          {/* Submit */}
+          <button
+            type="submit"
+            disabled={isLoading}
+            className="w-full flex items-center justify-center gap-2 px-6 py-3 font-body text-xl
+              bg-white text-pencil border-[3px] border-pencil shadow-hand
+              hover:bg-accent hover:text-white hover:shadow-hand-sm hover:translate-x-[2px] hover:translate-y-[2px]
+              active:shadow-none active:translate-x-[4px] active:translate-y-[4px]
+              disabled:opacity-50 disabled:cursor-not-allowed
+              transition-all duration-100"
+            style={{
+              borderRadius: "255px 15px 225px 15px / 15px 225px 15px 255px",
+            }}
+          >
+            <UserPlus size={20} strokeWidth={2.5} />
+            {isLoading ? "Registrando..." : "Registrarse"}
+          </button>
+        </form>
+
+        {/* Link a login */}
+        <p className="mt-6 text-center font-body text-lg text-pencil/60">
+          Ya tienes cuenta?{" "}
+          <Link
+            to="/login"
+            className="text-accent-blue underline hover:text-accent transition-colors"
+          >
+            Inicia sesion
+          </Link>
+        </p>
+      </div>
+    </div>
+  );
+}
