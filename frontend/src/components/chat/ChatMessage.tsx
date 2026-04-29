@@ -57,7 +57,8 @@ export default function ChatMessage({ message }: Props) {
               className="flex items-center gap-1 font-body text-sm text-pencil/50 hover:text-accent-blue transition-colors"
             >
               <FileText size={14} strokeWidth={2.5} />
-              {message.sources!.length} fuentes
+              {message.sources!.length}{" "}
+              {message.sources!.length === 1 ? "fuente" : "fuentes"}
               {showSources ? (
                 <ChevronUp size={14} strokeWidth={2.5} />
               ) : (
@@ -66,7 +67,7 @@ export default function ChatMessage({ message }: Props) {
             </button>
 
             {showSources && (
-              <div className="mt-1 space-y-1">
+              <div className="mt-1 space-y-2">
                 {message.sources!.map((source, i) => (
                   <div
                     key={i}
@@ -76,12 +77,29 @@ export default function ChatMessage({ message }: Props) {
                         "255px 15px 225px 15px / 15px 225px 15px 255px",
                     }}
                   >
-                    <span className="font-heading text-pencil font-bold text-xs">
-                      {source.document_name}
-                    </span>
-                    <p className="mt-0.5 text-xs leading-relaxed">
-                      {source.preview}
-                    </p>
+                    <div className="flex items-center justify-between gap-2">
+                      <span className="font-heading text-pencil font-bold text-xs">
+                        {source.document_name}
+                      </span>
+                      <span className="font-body text-[10px] text-pencil/50">
+                        {source.excerpts.length}{" "}
+                        {source.excerpts.length === 1
+                          ? "fragmento"
+                          : "fragmentos"}
+                      </span>
+                    </div>
+
+                    <ul className="mt-1.5 space-y-1.5">
+                      {source.excerpts.map((excerpt, j) => (
+                        <li
+                          key={j}
+                          className="pl-2 border-l-2 border-pencil/15 text-xs leading-relaxed"
+                        >
+                          {excerpt.preview}
+                          {excerpt.preview.length >= 400 && "…"}
+                        </li>
+                      ))}
+                    </ul>
                   </div>
                 ))}
               </div>

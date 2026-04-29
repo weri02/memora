@@ -28,7 +28,7 @@ services:
       - JINA_API_KEY=${JINA_API_KEY}
       - JWT_SECRET=${JWT_SECRET}
       - JWT_EXPIRATION_HOURS=${JWT_EXPIRATION_HOURS:-24}
-      - CEREBRAS_MODEL=${CEREBRAS_MODEL:-llama3.1-8b}
+      - CEREBRAS_MODEL=${CEREBRAS_MODEL:-gpt-oss-120b}
     volumes:
       - backend_uploads:/app/uploads
       - models_cache:/app/models_cache
@@ -40,6 +40,8 @@ services:
     build: ./frontend
     ports:
       - "5173:5173"
+    environment:
+      - VITE_API_URL=http://backend:8000
     volumes:
       - ./frontend/src:/app/src
     depends_on:

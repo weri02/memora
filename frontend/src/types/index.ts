@@ -47,12 +47,17 @@ export interface DocumentStats {
 
 // Chat
 
-export interface Source {
+export interface SourceExcerpt {
   chunk_id: number;
-  score: number;
-  rerank_score: number | null;
   preview: string;
+  score: number | null;
+  rerank_score: number | null;
+}
+
+export interface Source {
   document_name: string;
+  excerpts: SourceExcerpt[];
+  best_score: number | null;
 }
 
 export interface ChatMessage {

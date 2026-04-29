@@ -9,8 +9,8 @@ from app.services.embedding_service import get_embeddings_batch
 
 logger = logging.getLogger(__name__)
 
-CHUNK_SIZE = 800
-CHUNK_OVERLAP = 100
+CHUNK_SIZE = 2000
+CHUNK_OVERLAP = 300
 
 
 def _chunk_text(text: str) -> list[str]:

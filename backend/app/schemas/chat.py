@@ -18,12 +18,17 @@ class SendMessageRequest(BaseModel):
     content: str
 
 
-class SourceResponse(BaseModel):
+class SourceExcerpt(BaseModel):
     chunk_id: int
+    preview: str
     score: float | None = None
     rerank_score: float | None = None
-    preview: str
+
+
+class SourceResponse(BaseModel):
     document_name: str
+    excerpts: list[SourceExcerpt]
+    best_score: float | None = None
 
 
 class MessageResponse(BaseModel):

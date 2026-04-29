@@ -11,14 +11,14 @@ class Settings(BaseSettings):
 
     # LLM
     CEREBRAS_API_KEY: str = ""
-    CEREBRAS_MODEL: str = "llama3.1-8b"
+    CEREBRAS_MODEL: str = "gpt-oss-120b"
 
     # Reranker
     JINA_API_KEY: str = ""
 
     # Embedding
-    EMBEDDING_MODEL: str = "all-MiniLM-L6-v2"
-    EMBEDDING_DIMS: int = 384
+    EMBEDDING_MODEL: str = "BAAI/bge-m3"
+    EMBEDDING_DIMS: int = 1024
     MODELS_CACHE_DIR: str = "/app/models_cache"
 
     # Subida de archivos
