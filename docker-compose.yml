@@ -30,6 +30,8 @@ services:
       - JWT_EXPIRATION_HOURS=${JWT_EXPIRATION_HOURS:-24}
       - CEREBRAS_MODEL=${CEREBRAS_MODEL:-gpt-oss-120b}
     volumes:
+      - ./backend/app:/app/app
+      - ./backend/tests:/app/tests
       - backend_uploads:/app/uploads
       - models_cache:/app/models_cache
     depends_on:

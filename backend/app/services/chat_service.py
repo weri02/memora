@@ -116,7 +116,7 @@ async def stream_rag_response(
         )
 
         if chunks:
-            chunks = await rerank(user_message, chunks, top_k=15)
+            chunks = await rerank(user_message, chunks, top_k=10)
 
         context = _build_context(chunks)
         sources = _build_sources(chunks)

@@ -108,7 +108,7 @@ async def search_for_rag(
     query: str,
     user_id: uuid.UUID,
     document_ids: list[int] | None = None,
-    top_k: int = 15,
+    top_k: int = 10,
 ) -> list[dict]:
     candidates = await search_similar(db, query, user_id, document_ids, top_k=30, min_score=0.3)
 
