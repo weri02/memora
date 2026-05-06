@@ -1,0 +1,16 @@
+# Caddyfile - Reverse proxy con HTTPS automatico (Let's Encrypt)
+
+memorarag.dev, www.memorarag.dev {
+    # Las llamadas al API van al backend
+    handle /api/* {
+        reverse_proxy backend:8000
+    }
+
+    # Todo lo demas (UI) va al frontend
+    handle {
+        reverse_proxy frontend:5173
+    }
+
+    # Compresion para reducir transferencia
+    encode gzip
+}
