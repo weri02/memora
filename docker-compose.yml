@@ -3,6 +3,7 @@ name: memora
 services:
   postgres:
     image: pgvector/pgvector:pg16
+    restart: unless-stopped
     environment:
       POSTGRES_USER: ${POSTGRES_USER:-ragdocs}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-ragdocs_pass}
@@ -20,6 +21,7 @@ services:
 
   backend:
     build: ./backend
+    restart: unless-stopped
     ports:
       - "8000:8000"
     environment:
@@ -40,6 +42,7 @@ services:
 
   frontend:
     build: ./frontend
+    restart: unless-stopped
     ports:
       - "5173:5173"
     environment:
