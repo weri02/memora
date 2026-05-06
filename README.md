@@ -2,7 +2,9 @@
 
 Memora es una aplicación web que permite a un usuario subir documentos (PDF, DOCX, TXT), indexarlos automáticamente, y chatear con un LLM que responde basándose en el contenido de esos documentos.
 
-Trabajo Fin de Grado — Universitat Oberta de Catalunya.
+Trabajo Fin de Grado - Universitat Oberta de Catalunya.
+
+<img width="1920" height="887" alt="captura-memora" src="https://github.com/user-attachments/assets/15a0b486-07ba-468c-bbf3-813923377a4b" />
 
 ---
 
@@ -13,7 +15,13 @@ Trabajo Fin de Grado — Universitat Oberta de Catalunya.
    - Linux: instalar Docker Engine + Docker Compose plugin.
 2. **Dos API keys gratuitas**:
    - Cerebras: registrarse en https://cloud.cerebras.ai/ → "API Keys" → crear nueva clave (formato `csk-...`).
+   
+     <img width="1920" height="831" alt="cerebras-dashboard" src="https://github.com/user-attachments/assets/cd662f0e-f769-4d4c-b4cb-3603eb85697c" />
+     
    - Jina AI: acceder (no es necesario registro) a https://jina.ai/es/reranker/ → "API Key" (formato `jina_...`).
+
+     <img width="1920" height="874" alt="jina-apikey" src="https://github.com/user-attachments/assets/6c3531cf-6449-4ef5-854a-0f882ae2a8b7" />
+
 
 No es necesario instalar Python, Node.js, PostgreSQL ni otras herramientas. Todo se ejecuta dentro de Docker.
 
@@ -191,4 +199,4 @@ docker compose exec backend pytest
 
 ## Autor
 
-Houari Bekkay Boumaza — Trabajo Fin de Grado, Universitat Oberta de Catalunya.
+Houari Bekkay Boumaza - Trabajo Fin de Grado, Universitat Oberta de Catalunya.
