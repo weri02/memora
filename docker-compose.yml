@@ -26,11 +26,11 @@ services:
       - "8000:8000"
     environment:
       - DATABASE_URL=postgresql+asyncpg://${POSTGRES_USER:-ragdocs}:${POSTGRES_PASSWORD:-ragdocs_pass}@postgres:5432/${POSTGRES_DB:-ragdocs_db}
-      - CEREBRAS_API_KEY=${CEREBRAS_API_KEY}
+      - GROQ_API_KEY=${GROQ_API_KEY}
       - JINA_API_KEY=${JINA_API_KEY}
       - JWT_SECRET=${JWT_SECRET}
       - JWT_EXPIRATION_HOURS=${JWT_EXPIRATION_HOURS:-24}
-      - CEREBRAS_MODEL=${CEREBRAS_MODEL:-gpt-oss-120b}
+      - GROQ_MODEL=${GROQ_MODEL:-llama-3.3-70b-versatile}
     volumes:
       - ./backend/app:/app/app
       - ./backend/tests:/app/tests

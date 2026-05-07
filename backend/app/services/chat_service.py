@@ -4,7 +4,7 @@ import logging
 import uuid
 from typing import AsyncGenerator
 
-from cerebras.cloud.sdk import AsyncCerebras
+from groq import AsyncGroq
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -129,13 +129,13 @@ async def stream_rag_response(
             {"role": "user", "content": user_message},
         ]
 
-        # Stream from Cerebras
-        client = AsyncCerebras(api_key=settings.CEREBRAS_API_KEY)
+        # Stream from Groq
+        client = AsyncGroq(api_key=settings.GROQ_API_KEY)
         full_response = ""
 
         try:
             stream = await client.chat.completions.create(
-                model=settings.CEREBRAS_MODEL,
+                model=settings.GROQ_MODEL,
                 messages=llm_messages,
                 stream=True,
             )
@@ -147,7 +147,7 @@ async def stream_rag_response(
                     yield f"data: {json.dumps({'type': 'token', 'content': token})}\n\n"
 
         except Exception as e:
-            logger.error(f"Cerebras streaming error: {e}")
+            logger.error(f"Groq streaming error: {e}")
             full_response = "No he podido generar una respuesta. Intenta reformular tu pregunta."
             yield f"data: {json.dumps({'type': 'token', 'content': full_response})}\n\n"
 

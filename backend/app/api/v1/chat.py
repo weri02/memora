@@ -156,6 +156,6 @@ async def get_messages(
 @router.get("/health")
 async def chat_health():
     return {
-        "cerebras_configured": bool(settings.CEREBRAS_API_KEY),
+        "groq_configured": bool(settings.GROQ_API_KEY),
         "jina_configured": bool(settings.JINA_API_KEY),
     }

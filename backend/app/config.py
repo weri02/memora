@@ -10,8 +10,8 @@ class Settings(BaseSettings):
     JWT_EXPIRATION_HOURS: int = 24
 
     # LLM
-    CEREBRAS_API_KEY: str = ""
-    CEREBRAS_MODEL: str = "gpt-oss-120b"
+    GROQ_API_KEY: str = ""
+    GROQ_MODEL: str = "llama-3.3-70b-versatile"
 
     # Reranker
     JINA_API_KEY: str = ""

@@ -14,10 +14,7 @@ Trabajo Fin de Grado - Universitat Oberta de Catalunya.
    - Windows/macOS: https://www.docker.com/products/docker-desktop/
    - Linux: instalar Docker Engine + Docker Compose plugin.
 2. **Dos API keys gratuitas**:
-   - Cerebras: registrarse en https://cloud.cerebras.ai/ → "API Keys" → crear nueva clave (formato `csk-...`).
-   
-     <img width="1920" height="831" alt="cerebras-dashboard" src="https://github.com/user-attachments/assets/cd662f0e-f769-4d4c-b4cb-3603eb85697c" />
-     
+   - Groq: registrarse en https://console.groq.com/ → "API Keys" → crear nueva clave (formato `gsk_...`).
    - Jina AI: acceder (no es necesario registro) a https://jina.ai/es/reranker/ → "API Key" (formato `jina_...`).
 
      <img width="1920" height="874" alt="jina-apikey" src="https://github.com/user-attachments/assets/6c3531cf-6449-4ef5-854a-0f882ae2a8b7" />
@@ -47,7 +44,7 @@ cp .env.example .env
 Editar el archivo `.env` con un editor de texto y rellenar los tres valores obligatorios:
 
 ```env
-CEREBRAS_API_KEY=csk-tu-clave-aquí
+GROQ_API_KEY=gsk_tu-clave-aquí
 JINA_API_KEY=jina_tu-clave-aquí
 JWT_SECRET=cualquier-cadena-aleatoria-de-32-caracteres-o-mas
 ```
@@ -58,7 +55,7 @@ JWT_SECRET=cualquier-cadena-aleatoria-de-32-caracteres-o-mas
 python -c "import secrets; print(secrets.token_hex(32))"
 ```
 
-El resto de variables (`POSTGRES_USER`, `CEREBRAS_MODEL`, etc.) tienen valores por defecto y solo es necesario cambiarlas en caso de querer personalizar la instalación.
+El resto de variables (`POSTGRES_USER`, `GROQ_MODEL`, etc.) tienen valores por defecto y solo es necesario cambiarlas en caso de querer personalizar la instalación.
 
 ### 3. Levantar todos los servicios
 
