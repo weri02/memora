@@ -6,6 +6,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from app.models.document import Document, DocumentChunk
 from app.services.document_service import extract_text
 from app.services.embedding_service import get_embeddings_batch
+from app.services.events_service import publish_document_status
 
 logger = logging.getLogger(__name__)
 
@@ -47,8 +48,10 @@ def _detect_section(text: str) -> str:
 
 
 async def index_document(db: AsyncSession, document: Document) -> None:
+    user_id = document.user_id
     document.status = "processing"
     await db.commit()
+    await publish_document_status(user_id, document.id, "processing")
 
     try:
         text = await asyncio.to_thread(extract_text, document.file_path, document.file_type)
@@ -57,6 +60,7 @@ async def index_document(db: AsyncSession, document: Document) -> None:
             document.status = "error"
             document.error_message = "No text content extracted"
             await db.commit()
+            await publish_document_status(user_id, document.id, "error")
             return
 
         chunks = _chunk_text(text)
@@ -84,6 +88,7 @@ async def index_document(db: AsyncSession, document: Document) -> None:
         document.chunk_count = len(chunks)
         document.status = "indexed"
         await db.commit()
+        await publish_document_status(user_id, document.id, "indexed", chunk_count=len(chunks))
 
         logger.info(f"Indexed document {document.id}: {len(chunks)} chunks")
 
@@ -92,3 +97,4 @@ async def index_document(db: AsyncSession, document: Document) -> None:
         document.status = "error"
         document.error_message = str(e)[:500]
         await db.commit()
+        await publish_document_status(user_id, document.id, "error")

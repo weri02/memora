@@ -1,10 +1,13 @@
 import { FileText, Database, Layers } from "lucide-react";
-import { useDocumentStats } from "@/hooks/useDocuments";
+import { useDocumentStats, useDocumentEvents } from "@/hooks/useDocuments";
 import DocumentUpload from "@/components/documents/DocumentUpload";
 import DocumentList from "@/components/documents/DocumentList";
 
 export default function DocumentsPage() {
   const { data: stats } = useDocumentStats();
+
+  // Eventos SSE para el update del estado de los documentos
+  useDocumentEvents();
 
   return (
     <div className="space-y-8">

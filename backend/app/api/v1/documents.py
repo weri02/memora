@@ -1,9 +1,11 @@
+import asyncio
+import json
 import os
 import uuid
-from pathlib import Path
 
-from fastapi import APIRouter, Depends, UploadFile, File, BackgroundTasks
-from sqlalchemy import select, func, delete
+from fastapi import APIRouter, Depends, UploadFile, File, BackgroundTasks, HTTPException, status
+from fastapi.responses import StreamingResponse
+from sqlalchemy import select, delete
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.config import settings
@@ -13,6 +15,8 @@ from app.core.exceptions import NotFoundError, BadRequestError
 from app.models.user import User
 from app.models.document import Document, DocumentChunk
 from app.schemas.document import DocumentResponse, DocumentStatsResponse
+from app.services.auth_service import decode_token
+from app.services.events_service import subscribe, unsubscribe
 from app.services.indexing_service import index_document
 
 router = APIRouter(prefix="/documents", tags=["documents"])
@@ -103,6 +107,37 @@ async def get_stats(
         total_chunks=total_chunks,
         by_status=by_status,
         by_type=by_type,
+    )
+
+
+@router.get("/events")
+async def documents_events(token: str):
+    payload = decode_token(token)
+    if not payload:
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid token")
+
+    try:
+        user_id = uuid.UUID(payload["sub"])
+    except (KeyError, ValueError):
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid token payload")
+
+    queue = await subscribe(user_id)
+
+    async def stream():
+        try:
+            while True:
+                try:
+                    event = await asyncio.wait_for(queue.get(), timeout=30)
+                    yield f"data: {json.dumps(event)}\n\n"
+                except asyncio.TimeoutError:
+                    yield ": heartbeat\n\n"
+        finally:
+            unsubscribe(user_id, queue)
+
+    return StreamingResponse(
+        stream(),
+        media_type="text/event-stream",
+        headers={"Cache-Control": "no-cache", "X-Accel-Buffering": "no"},
     )
 
 

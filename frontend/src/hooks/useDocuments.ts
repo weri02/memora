@@ -1,5 +1,7 @@
+import { useEffect } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import api from "@/lib/api";
+import { TOKEN_KEY } from "@/lib/constants";
 import type { Document, DocumentStats } from "@/types";
 
 // Lista de documentos del usuario
@@ -58,6 +60,33 @@ export function useDeleteDocument() {
       queryClient.invalidateQueries({ queryKey: ["document-stats"] });
     },
   });
+}
+
+// Suscribirse al stream SSE de eventos de documentos
+export function useDocumentEvents() {
+  const queryClient = useQueryClient();
+
+  useEffect(() => {
+    const token = localStorage.getItem(TOKEN_KEY);
+    if (!token) return;
+
+    const evt = new EventSource(
+      `/api/v1/documents/events?token=${encodeURIComponent(token)}`,
+    );
+
+    evt.onmessage = () => {
+      queryClient.invalidateQueries({ queryKey: ["documents"] });
+      queryClient.invalidateQueries({ queryKey: ["document-stats"] });
+    };
+
+    evt.onerror = () => {
+      // EventSource intenta reconectar automaticamente
+    };
+
+    return () => {
+      evt.close();
+    };
+  }, [queryClient]);
 }
 
 // Re-indexar documento
