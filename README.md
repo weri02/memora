@@ -170,6 +170,22 @@ Probablemente está descargando el modelo de embeddings BGE-M3. Esperar 1-2 minu
 docker compose logs -f backend
 ```
 
+### Error backend: entrypoint.sh: no such file or directory
+
+Este error suele deberse a finales de línea incorrectos (CRLF en lugar de LF), especialmente si el archivo fue editado en Windows.
+
+Para solucionarlo:
+
+1. Abrir el archivo `entrypoint.sh` en un editor (VS Code, Notepad++, etc.).
+2. Cambiar el formato de finales de línea de **CRLF** a **LF**.
+   - En VS Code: esquina inferior derecha → seleccionar `CRLF` → cambiar a `LF`.
+3. Guardar el archivo y reconstruir los contenedores:
+
+```bash
+docker compose down
+docker compose up --build
+```
+
 ### El frontend muestra "ECONNREFUSED" al hacer login
 
 El backend aún no terminó de arrancar. Esperar a que aparezca `Uvicorn running on http://0.0.0.0:8000` en sus logs y refrescar el navegador.
