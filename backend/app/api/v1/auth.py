@@ -5,8 +5,8 @@ from app.core.database import get_db
 from app.core.dependencies import get_current_user
 from app.core.exceptions import BadRequestError
 from app.models.user import User
-from app.schemas.auth import RegisterRequest, LoginRequest, TokenResponse, UserResponse
-from app.services.auth_service import register_user, authenticate_user, create_access_token
+from app.schemas.auth import RegisterRequest, LoginRequest, ChangePasswordRequest, TokenResponse, UserResponse
+from app.services.auth_service import register_user, authenticate_user, create_access_token, change_password
 
 router = APIRouter(prefix="/auth", tags=["auth"])
 
@@ -29,3 +29,12 @@ async def login(data: LoginRequest, db: AsyncSession = Depends(get_db)):
 @router.get("/me", response_model=UserResponse)
 async def me(current_user: User = Depends(get_current_user)):
     return current_user
+
+
+@router.post("/change-password", status_code=204)
+async def change_password_endpoint(
+    data: ChangePasswordRequest,
+    current_user: User = Depends(get_current_user),
+    db: AsyncSession = Depends(get_db),
+):
+    await change_password(db, current_user, data.current_password, data.new_password)

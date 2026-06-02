@@ -59,3 +59,23 @@ async def authenticate_user(db: AsyncSession, email: str, password: str) -> User
     if not user or not verify_password(password, user.hashed_password):
         return None
     return user
+
+
+async def change_password(
+    db: AsyncSession,
+    user: User,
+    current_password: str,
+    new_password: str,
+) -> None:
+    """Cambia la contraseña de un usuario autenticado."""
+    if not verify_password(current_password, user.hashed_password):
+        raise BadRequestError("Current password is incorrect")
+
+    if len(new_password) < 6:
+        raise BadRequestError("Password must be at least 6 characters")
+
+    if verify_password(new_password, user.hashed_password):
+        raise BadRequestError("New password must be different from the current one")
+
+    user.hashed_password = hash_password(new_password)
+    await db.commit()
