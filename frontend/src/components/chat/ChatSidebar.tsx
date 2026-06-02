@@ -71,11 +71,9 @@ export default function ChatSidebar({ onSelectConversation }: ChatSidebarProps) 
         )}
 
         {conversations.map((conv) => (
-          <button
+          <div
             key={conv.id}
-            onClick={() => { selectConversation(conv.id); onSelectConversation?.(); }}
-            className={`w-full flex items-center gap-2 px-3 py-2.5 text-left font-body
-              border-2 transition-all duration-100 group
+            className={`relative group flex items-center border-2 transition-all duration-100
               ${
                 activeConversationId === conv.id
                   ? "bg-accent text-white border-accent shadow-hand-sm"
@@ -85,13 +83,22 @@ export default function ChatSidebar({ onSelectConversation }: ChatSidebarProps) 
               borderRadius: "15px 255px 15px 225px / 225px 15px 255px 15px",
             }}
           >
-            <MessageCircle size={16} strokeWidth={2.5} className="flex-shrink-0" />
-            <span className="flex-1 truncate">{conv.titulo}</span>
+            {/* Boton seleccionar conversacion */}
+            <button
+              onClick={() => { selectConversation(conv.id); onSelectConversation?.(); }}
+              className="flex-1 flex items-center gap-2 px-3 py-2.5 pr-9 text-left font-body min-w-0"
+            >
+              <MessageCircle size={16} strokeWidth={2.5} className="flex-shrink-0" />
+              <span className="flex-1 truncate">{conv.titulo}</span>
+            </button>
 
             {/* Boton eliminar */}
-            <span
+            <button
+              type="button"
               onClick={(e) => handleDelete(e, conv.id)}
-              className={`flex-shrink-0 p-1 rounded opacity-0 group-hover:opacity-100 transition-opacity
+              aria-label={`Eliminar conversación ${conv.titulo}`}
+              className={`absolute right-2 top-1/2 -translate-y-1/2 flex-shrink-0 p-1 rounded
+                opacity-0 group-hover:opacity-100 focus:opacity-100 transition-opacity
                 ${
                   activeConversationId === conv.id
                     ? "hover:bg-white/20"
@@ -99,8 +106,8 @@ export default function ChatSidebar({ onSelectConversation }: ChatSidebarProps) 
                 }`}
             >
               <Trash2 size={14} strokeWidth={2.5} />
-            </span>
-          </button>
+            </button>
+          </div>
         ))}
       </div>
     </div>

@@ -61,6 +61,7 @@ export default function RegisterPage() {
         {/* Error */}
         {displayError && (
           <div
+            role="alert"
             className="mb-4 p-3 bg-accent/10 border-2 border-accent text-accent font-body text-center"
             style={{
               borderRadius: "255px 15px 225px 15px / 15px 225px 15px 255px",
@@ -68,10 +69,12 @@ export default function RegisterPage() {
           >
             {displayError}
             <button
+              type="button"
               onClick={() => {
                 setLocalError("");
                 clearError();
               }}
+              aria-label="Cerrar error"
               className="ml-2 underline hover:no-underline"
             >
               x
@@ -83,14 +86,19 @@ export default function RegisterPage() {
         <form onSubmit={handleSubmit} className="space-y-4">
           {/* Nombre */}
           <div>
-            <label className="font-heading text-lg text-pencil block mb-1">
+            <label
+              htmlFor="register-name"
+              className="font-heading text-lg text-pencil block mb-1"
+            >
               Nombre
             </label>
             <input
+              id="register-name"
               type="text"
               value={name}
               onChange={(e) => setName(e.target.value)}
               required
+              autoComplete="name"
               placeholder="Tu nombre"
               className="w-full px-4 py-3 font-body text-lg bg-white border-2 border-pencil
                 placeholder:text-pencil/40
@@ -104,14 +112,19 @@ export default function RegisterPage() {
 
           {/* Email */}
           <div>
-            <label className="font-heading text-lg text-pencil block mb-1">
+            <label
+              htmlFor="register-email"
+              className="font-heading text-lg text-pencil block mb-1"
+            >
               Email
             </label>
             <input
+              id="register-email"
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
+              autoComplete="email"
               placeholder="tu@email.com"
               className="w-full px-4 py-3 font-body text-lg bg-white border-2 border-pencil
                 placeholder:text-pencil/40
@@ -125,15 +138,20 @@ export default function RegisterPage() {
 
           {/* Password */}
           <div>
-            <label className="font-heading text-lg text-pencil block mb-1">
+            <label
+              htmlFor="register-password"
+              className="font-heading text-lg text-pencil block mb-1"
+            >
               Password
             </label>
             <div className="relative">
               <input
+                id="register-password"
                 type={showPassword ? "text" : "password"}
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
+                autoComplete="new-password"
                 placeholder="Minimo 6 caracteres"
                 className="w-full px-4 py-3 pr-12 font-body text-lg bg-white border-2 border-pencil
                   placeholder:text-pencil/40
@@ -147,6 +165,10 @@ export default function RegisterPage() {
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
+                aria-label={
+                  showPassword ? "Ocultar contraseña" : "Mostrar contraseña"
+                }
+                aria-pressed={showPassword}
                 className="absolute right-3 top-1/2 -translate-y-1/2 text-pencil/50 hover:text-pencil"
               >
                 {showPassword ? (
@@ -160,14 +182,19 @@ export default function RegisterPage() {
 
           {/* Confirmar password */}
           <div>
-            <label className="font-heading text-lg text-pencil block mb-1">
+            <label
+              htmlFor="register-confirm-password"
+              className="font-heading text-lg text-pencil block mb-1"
+            >
               Confirmar password
             </label>
             <input
+              id="register-confirm-password"
               type={showPassword ? "text" : "password"}
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
               required
+              autoComplete="new-password"
               placeholder="Repite tu password"
               className="w-full px-4 py-3 font-body text-lg bg-white border-2 border-pencil
                 placeholder:text-pencil/40

@@ -70,6 +70,8 @@ export default function DocumentUpload() {
     <div className="space-y-3">
       {/* Zona de drag-and-drop */}
       <div
+        role="button"
+        aria-label="Subir archivo: arrastra aquí o pulsa para seleccionar un PDF, DOCX o TXT"
         onDragOver={handleDragOver}
         onDragLeave={handleDragLeave}
         onDrop={handleDrop}
@@ -91,6 +93,7 @@ export default function DocumentUpload() {
           type="file"
           accept=".pdf,.docx,.txt"
           onChange={handleFileSelect}
+          aria-label="Seleccionar archivo para subir"
           className="hidden"
         />
 
@@ -122,6 +125,7 @@ export default function DocumentUpload() {
       {/* Error en la subida */}
       {uploadError && (
         <div
+          role="alert"
           className="flex items-center gap-2 p-3 bg-accent/10 border-2 border-accent font-body text-accent"
           style={{
             borderRadius: "255px 15px 225px 15px / 15px 225px 15px 255px",
@@ -135,6 +139,7 @@ export default function DocumentUpload() {
       {/* Confirmacion de subida exitosa */}
       {upload.isSuccess && !uploadError && (
         <div
+          role="status"
           className="flex items-center gap-2 p-3 bg-green-50 border-2 border-green-600 font-body text-green-700"
           style={{
             borderRadius: "255px 15px 225px 15px / 15px 225px 15px 255px",

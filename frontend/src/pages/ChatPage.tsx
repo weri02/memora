@@ -15,6 +15,8 @@ export default function ChatPage() {
         {/* Boton toggle sidebar - solo movil */}
         <button
           onClick={() => setSidebarOpen(!sidebarOpen)}
+          aria-label={sidebarOpen ? "Cerrar menú de conversaciones" : "Abrir menú de conversaciones"}
+          aria-expanded={sidebarOpen}
           className="md:hidden absolute top-2 left-2 z-30 p-2 border-2 border-pencil bg-white text-pencil
             hover:bg-accent hover:text-white transition-all duration-100"
           style={{

@@ -16,6 +16,7 @@ export default function ChatInput() {
     // Reset altura del textarea
     if (textareaRef.current) {
       textareaRef.current.style.height = "auto";
+      textareaRef.current.focus();
     }
   };
 
@@ -43,7 +44,11 @@ export default function ChatInput() {
         borderRadius: "255px 15px 225px 15px / 15px 225px 15px 255px",
       }}
     >
+      <label htmlFor="chat-input" className="sr-only">
+        Escribe tu pregunta
+      </label>
       <textarea
+        id="chat-input"
         ref={textareaRef}
         value={text}
         onChange={(e) => handleInput(e.target.value)}
@@ -61,6 +66,7 @@ export default function ChatInput() {
       <button
         onClick={handleSend}
         disabled={!canSend}
+        aria-label="Enviar mensaje"
         className="flex-shrink-0 w-10 h-10 flex items-center justify-center
           border-2 border-pencil bg-white text-pencil
           hover:bg-accent hover:text-white hover:border-accent

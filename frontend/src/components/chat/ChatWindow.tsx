@@ -45,7 +45,11 @@ export default function ChatWindow() {
   return (
     <div className="flex-1 flex flex-col h-full">
       {/* Area de mensajes */}
-      <div className="flex-1 overflow-y-auto p-4 space-y-4">
+      <div
+        className="flex-1 overflow-y-auto p-4 space-y-4"
+        aria-live="polite"
+        aria-busy={isStreaming}
+      >
         {isLoadingMessages && (
           <p className="text-center font-body text-pencil/40 py-8">
             Cargando mensajes...

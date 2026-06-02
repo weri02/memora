@@ -42,6 +42,7 @@ export default function LoginPage() {
         {/* Error */}
         {error && (
           <div
+            role="alert"
             className="mb-4 p-3 bg-accent/10 border-2 border-accent text-accent font-body text-center"
             style={{
               borderRadius: "255px 15px 225px 15px / 15px 225px 15px 255px",
@@ -49,7 +50,9 @@ export default function LoginPage() {
           >
             {error}
             <button
+              type="button"
               onClick={clearError}
+              aria-label="Cerrar error"
               className="ml-2 underline hover:no-underline"
             >
               x
@@ -61,14 +64,19 @@ export default function LoginPage() {
         <form onSubmit={handleSubmit} className="space-y-5">
           {/* Email */}
           <div>
-            <label className="font-heading text-lg text-pencil block mb-1">
+            <label
+              htmlFor="login-email"
+              className="font-heading text-lg text-pencil block mb-1"
+            >
               Email
             </label>
             <input
+              id="login-email"
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
+              autoComplete="email"
               placeholder="tu@email.com"
               className="w-full px-4 py-3 font-body text-lg bg-white border-2 border-pencil
                 placeholder:text-pencil/40
@@ -82,15 +90,20 @@ export default function LoginPage() {
 
           {/* Password */}
           <div>
-            <label className="font-heading text-lg text-pencil block mb-1">
+            <label
+              htmlFor="login-password"
+              className="font-heading text-lg text-pencil block mb-1"
+            >
               Password
             </label>
             <div className="relative">
               <input
+                id="login-password"
                 type={showPassword ? "text" : "password"}
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
+                autoComplete="current-password"
                 placeholder="Tu password"
                 className="w-full px-4 py-3 pr-12 font-body text-lg bg-white border-2 border-pencil
                   placeholder:text-pencil/40
@@ -104,6 +117,10 @@ export default function LoginPage() {
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
+                aria-label={
+                  showPassword ? "Ocultar contraseña" : "Mostrar contraseña"
+                }
+                aria-pressed={showPassword}
                 className="absolute right-3 top-1/2 -translate-y-1/2 text-pencil/50 hover:text-pencil"
               >
                 {showPassword ? (
