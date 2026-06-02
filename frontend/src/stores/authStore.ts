@@ -12,6 +12,7 @@ interface AuthState {
   // Acciones
   login: (email: string, password: string) => Promise<void>;
   register: (email: string, password: string, name: string) => Promise<void>;
+  changePassword: (currentPassword: string, newPassword: string) => Promise<void>;
   logout: () => void;
   fetchUser: () => Promise<void>;
   clearError: () => void;
@@ -64,6 +65,23 @@ export const useAuthStore = create<AuthState>((set) => ({
       const message =
         (err as { response?: { data?: { detail?: string } } }).response?.data
           ?.detail || "Error al registrarse";
+      set({ error: message, isLoading: false });
+      throw err;
+    }
+  },
+
+  changePassword: async (currentPassword, newPassword) => {
+    set({ isLoading: true, error: null });
+    try {
+      await api.post("/auth/change-password", {
+        current_password: currentPassword,
+        new_password: newPassword,
+      });
+      set({ isLoading: false });
+    } catch (err: unknown) {
+      const message =
+        (err as { response?: { data?: { detail?: string } } }).response?.data
+          ?.detail || "Error al cambiar la contraseña";
       set({ error: message, isLoading: false });
       throw err;
     }

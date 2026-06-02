@@ -9,6 +9,7 @@ import LoginPage from "@/pages/LoginPage";
 import RegisterPage from "@/pages/RegisterPage";
 import DocumentsPage from "@/pages/DocumentsPage";
 import ChatPage from "@/pages/ChatPage";
+import SettingsPage from "@/pages/SettingsPage";
 
 function AppRoutes() {
   const { token, fetchUser } = useAuthStore();
@@ -35,6 +36,7 @@ function AppRoutes() {
         }
       >
         <Route path="/documents" element={<DocumentsPage />} />
+        <Route path="/settings" element={<SettingsPage />} />
       </Route>
 
       {/* Chat */}

@@ -1,5 +1,5 @@
 import { Link, useLocation } from "react-router-dom";
-import { FileText, MessageCircle, LogOut } from "lucide-react";
+import { FileText, MessageCircle, LogOut, Settings } from "lucide-react";
 import { useAuthStore } from "@/stores/authStore";
 
 export default function Navbar() {
@@ -54,13 +54,33 @@ export default function Navbar() {
           </Link>
         </div>
 
-        {/* Usuario + logout */}
+        {/* Usuario + ajustes + logout */}
         <div className="flex items-center gap-2 md:gap-3">
           <span className="font-body text-pencil text-lg hidden md:block">
             {user?.name}
           </span>
+          <Link
+            to="/settings"
+            aria-label="Ajustes de cuenta"
+            aria-current={isActive("/settings") ? "page" : undefined}
+            className={`flex items-center p-1.5 md:p-2 border-2 border-pencil shadow-hand-sm
+              transition-all duration-100
+              hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-none
+              ${
+                isActive("/settings")
+                  ? "bg-accent text-white border-accent"
+                  : "bg-muted text-pencil hover:bg-accent hover:text-white hover:border-accent"
+              }`}
+            style={{
+              borderRadius: "15px 255px 15px 225px / 225px 15px 255px 15px",
+            }}
+            title="Ajustes"
+          >
+            <Settings size={16} strokeWidth={2.5} />
+          </Link>
           <button
             onClick={logout}
+            aria-label="Cerrar sesion"
             className="flex items-center gap-1 px-2 md:px-3 py-1.5 md:py-2 font-body text-pencil border-2 border-pencil bg-muted shadow-hand-sm
               hover:bg-accent hover:text-white hover:border-accent transition-all duration-100
               hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-none"

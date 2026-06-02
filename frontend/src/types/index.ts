@@ -23,6 +23,11 @@ export interface RegisterRequest {
   name: string;
 }
 
+export interface ChangePasswordRequest {
+  current_password: string;
+  new_password: string;
+}
+
 // Documentos
 
 export interface Document {
