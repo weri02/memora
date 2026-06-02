@@ -1,4 +1,4 @@
-# Memora — Sistema de Gestión Documental con RAG
+# Memora - Sistema de Gestión Documental con RAG
 
 Memora es una aplicación web que permite a un usuario subir documentos (PDF, DOCX, TXT), indexarlos automáticamente, y chatear con un LLM que responde basándose en el contenido de esos documentos.
 
@@ -15,6 +15,9 @@ Trabajo Fin de Grado - Universitat Oberta de Catalunya.
    - Linux: instalar Docker Engine + Docker Compose plugin.
 2. **Dos API keys gratuitas**:
    - Groq: registrarse en https://console.groq.com/ → "API Keys" → crear nueva clave (formato `gsk_...`).
+
+     <img width="1920" height="880" alt="image" src="https://github.com/user-attachments/assets/e74ee95b-870a-44a8-b518-d4329aaa30a2" />
+
    - Jina AI: acceder (no es necesario registro) a https://jina.ai/es/reranker/ → "API Key" (formato `jina_...`).
 
      <img width="1920" height="874" alt="jina-apikey" src="https://github.com/user-attachments/assets/6c3531cf-6449-4ef5-854a-0f882ae2a8b7" />
@@ -165,6 +168,22 @@ Probablemente está descargando el modelo de embeddings BGE-M3. Esperar 1-2 minu
 
 ```bash
 docker compose logs -f backend
+```
+
+### Error backend: entrypoint.sh: no such file or directory
+
+Este error suele deberse a finales de línea incorrectos (CRLF en lugar de LF), especialmente si el archivo fue editado en Windows.
+
+Para solucionarlo:
+
+1. Abrir el archivo `entrypoint.sh` en un editor (VS Code, Notepad++, etc.).
+2. Cambiar el formato de finales de línea de **CRLF** a **LF**.
+   - En VS Code: esquina inferior derecha → seleccionar `CRLF` → cambiar a `LF`.
+3. Guardar el archivo y reconstruir los contenedores:
+
+```bash
+docker compose down
+docker compose up --build
 ```
 
 ### El frontend muestra "ECONNREFUSED" al hacer login
